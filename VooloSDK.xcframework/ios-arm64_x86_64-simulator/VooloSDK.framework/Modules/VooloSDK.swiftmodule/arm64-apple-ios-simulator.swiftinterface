@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
 // swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name VooloSDK
 import Foundation
 import HyperSnapSDK
@@ -16,6 +16,7 @@ public struct VPersonal : Swift.Codable {
   public var providers: [VooloSDK.VProvider]?
   public var tenor: VooloSDK.VTenor?
   public var creditLimit: Swift.Double?
+  public var pin: Swift.String?
   public var createdAt: Foundation.Date? {
     get
   }
@@ -169,23 +170,29 @@ extension VooloSDK.VSnapParams.LivenessMode : Swift.Hashable {
 }
 public struct VItem : Swift.Codable {
   public let id: Swift.String, name: Swift.String
-  public let price: Swift.Int, shipFee: Swift.Int
+  public let price: Swift.Double, shipFee: Swift.Double
   public let image: Swift.String, desc: Swift.String
+  public var createdAt: Foundation.Date? {
+    get
+  }
+  public var updatedAt: Foundation.Date? {
+    get
+  }
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
 public struct VSnapConfig {
   public init(appID: Swift.String, appKey: Swift.String, region: VooloSDK.VSnapParams.Region)
 }
-public enum VProcess : Swift.String {
+public enum VProcess : Swift.Int {
   case not_exist
-  case register_success
+  case registered_personal
   case kyc_process
   case kyc_completed
   case kyc_failure
-  public init?(rawValue: Swift.String)
-  public typealias RawValue = Swift.String
-  public var rawValue: Swift.String {
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
     get
   }
 }
@@ -198,6 +205,8 @@ public enum VError : Swift.Error {
   case phoneNotExistsEAP
   case phoneNotExistsBNPL
   case parsingModelFailure
+  case phoneNumberWrong
+  case IDCardWrong
   case other(Swift.String, Swift.Int)
   public var errorDescription: Swift.String {
     get
@@ -225,8 +234,13 @@ public struct VTenor : Swift.Codable {
   public let id: Swift.String?
   public let originPrice: Swift.Double?
   public let convertFee: Swift.Double?, paymentSchedule: Swift.Double?
-  public let createdAt: Swift.String?, updatedAt: Swift.String?
   public var totalPrice: Swift.Double {
+    get
+  }
+  public var createdAt: Foundation.Date? {
+    get
+  }
+  public var updatedAt: Foundation.Date? {
     get
   }
   public func encode(to encoder: Swift.Encoder) throws
@@ -235,6 +249,12 @@ public struct VTenor : Swift.Codable {
 public struct VProvider : Swift.Codable {
   public let id: Swift.String?
   public let provider: Swift.String?
+  public var createdAt: Foundation.Date? {
+    get
+  }
+  public var updatedAt: Foundation.Date? {
+    get
+  }
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
